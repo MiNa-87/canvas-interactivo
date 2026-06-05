@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modelo Canvas · Té en Hebras | Aprende a Emprender</title>
+  <title>Modelo Canvas Interactivo | Aprende a Emprender</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1029,6 +1029,80 @@
       .canvas-header h1 { font-size: 19px; }
       .tbtn span.tbtn-label { display: none; }
     }
+
+    /* ══════════════════════════
+       PROJECT PANEL
+    ══════════════════════════ */
+    .project-panel {
+      background: white;
+      border: 2px solid var(--c-mint);
+      margin-bottom: 18px;
+    }
+
+    .project-panel-head {
+      background: var(--c-dark);
+      padding: 11px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .project-panel-label {
+      color: var(--c-lime);
+      font-weight: 900;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .project-fields {
+      padding: 14px 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 2fr;
+      gap: 10px 14px;
+    }
+
+    .proj-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .proj-field-label {
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #777;
+    }
+
+    .proj-input {
+      border: 1.5px solid #d8dce2;
+      padding: 8px 11px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--c-dark);
+      background: #fafbfc;
+      transition: border-color 0.15s;
+    }
+
+    .proj-input:focus {
+      outline: none;
+      border-color: var(--c-teal);
+      background: white;
+    }
+
+    .proj-input::placeholder {
+      color: #bbb;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 12px;
+    }
+
+    @media (max-width: 760px) {
+      .project-fields { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -1056,10 +1130,31 @@
 <!-- ══ PAGE ══ -->
 <div class="page">
 
+  <!-- Datos del proyecto -->
+  <div class="project-panel">
+    <div class="project-panel-head">
+      <span class="project-panel-label">📝 Datos del proyecto</span>
+    </div>
+    <div class="project-fields">
+      <div class="proj-field">
+        <label class="proj-field-label" for="proj-nombre">Nombre del emprendimiento</label>
+        <input class="proj-input" type="text" id="proj-nombre" placeholder="Ej: Té en Hebras, Mi Emprendimiento…" maxlength="80">
+      </div>
+      <div class="proj-field">
+        <label class="proj-field-label" for="proj-producto">Producto o servicio</label>
+        <input class="proj-input" type="text" id="proj-producto" placeholder="Ej: Bolsitas de té artesanal…" maxlength="80">
+      </div>
+      <div class="proj-field">
+        <label class="proj-field-label" for="proj-descripcion">Descripción breve del proyecto</label>
+        <input class="proj-input" type="text" id="proj-descripcion" placeholder="Ej: Vendemos productos naturales para personas que buscan bienestar…" maxlength="200">
+      </div>
+    </div>
+  </div>
+
   <!-- Canvas title -->
   <div class="canvas-header">
-    <h1>Modelo Canvas</h1>
-    <p>🍵 Bolsitas de Té en Hebras &nbsp;·&nbsp; Hacé clic en cada bloque para completarlo</p>
+    <h1>Modelo Canvas Interactivo</h1>
+    <p id="canvas-subtitle">Completá los datos de tu proyecto para empezar</p>
   </div>
 
   <!-- ══ CANVAS GRID ══ -->
@@ -1226,27 +1321,27 @@
 
         <!-- 1. Variable costs -->
         <div class="sim-section">
-          <div class="sim-section-title">💸 Costos variables por bolsita</div>
-          <p class="sim-desc">Son los gastos que se repiten por cada bolsita que producís. Cuantas más hacés, más pagás en total.</p>
+          <div class="sim-section-title">💸 Costos variables por unidad</div>
+          <p class="sim-desc">Son los gastos que se repiten por cada unidad que producís. Cuantas más hacés, más pagás en total.</p>
           <div class="sim-fields">
             <div class="sim-field">
-              <label class="sim-label">Té en hebras por bolsita</label>
+              <label class="sim-label">Insumo principal por unidad</label>
               <div class="sim-prefix"><span class="sim-prefix-sym">$</span><input class="sim-input" id="f-te" type="number" min="0" step="any" placeholder="0"></div>
             </div>
             <div class="sim-field">
-              <label class="sim-label">Filtro o bolsita de tela</label>
+              <label class="sim-label">Envase o soporte</label>
               <div class="sim-prefix"><span class="sim-prefix-sym">$</span><input class="sim-input" id="f-filtro" type="number" min="0" step="any" placeholder="0"></div>
             </div>
             <div class="sim-field">
-              <label class="sim-label">Etiqueta</label>
+              <label class="sim-label">Etiqueta o identificación</label>
               <div class="sim-prefix"><span class="sim-prefix-sym">$</span><input class="sim-input" id="f-etiqueta" type="number" min="0" step="any" placeholder="0"></div>
             </div>
             <div class="sim-field">
-              <label class="sim-label">Packaging (bolsa, caja, papel)</label>
+              <label class="sim-label">Packaging o presentación</label>
               <div class="sim-prefix"><span class="sim-prefix-sym">$</span><input class="sim-input" id="f-packaging" type="number" min="0" step="any" placeholder="0"></div>
             </div>
             <div class="sim-field">
-              <label class="sim-label">Hilo, cierre o presentación</label>
+              <label class="sim-label">Cierre, terminación o detalle</label>
               <div class="sim-prefix"><span class="sim-prefix-sym">$</span><input class="sim-input" id="f-hilo" type="number" min="0" step="any" placeholder="0"></div>
             </div>
             <div class="sim-field">
@@ -1258,11 +1353,11 @@
 
         <!-- 2. Fixed costs -->
         <div class="sim-section">
-          <div class="sim-section-title">🧾 Costos fijos de la tanda</div>
-          <p class="sim-desc">Son gastos que pagás una sola vez por tanda, sin importar cuántas bolsitas producís.</p>
+          <div class="sim-section-title">🧾 Costos fijos de producción</div>
+          <p class="sim-desc">Son gastos que pagás una sola vez, sin importar cuántas unidades producís.</p>
           <div class="sim-fields">
             <div class="sim-field">
-              <label class="sim-label">Diseño o impresión de etiquetas</label>
+              <label class="sim-label">Diseño o impresión</label>
               <div class="sim-prefix"><span class="sim-prefix-sym">$</span><input class="sim-input" id="f-diseno" type="number" min="0" step="any" placeholder="0"></div>
             </div>
             <div class="sim-field">
@@ -1270,7 +1365,7 @@
               <div class="sim-prefix"><span class="sim-prefix-sym">$</span><input class="sim-input" id="f-transporte" type="number" min="0" step="any" placeholder="0"></div>
             </div>
             <div class="sim-field">
-              <label class="sim-label">Publicidad (redes, impresiones)</label>
+              <label class="sim-label">Publicidad o comunicación</label>
               <div class="sim-prefix"><span class="sim-prefix-sym">$</span><input class="sim-input" id="f-publicidad" type="number" min="0" step="any" placeholder="0"></div>
             </div>
             <div class="sim-field">
@@ -1287,16 +1382,16 @@
         <!-- 3. Production -->
         <div class="sim-section">
           <div class="sim-section-title">🏭 Tu producción</div>
-          <p class="sim-desc">¿Cuántas unidades van a hacer en esta tanda? Si vendés en packs, indicá cuántas bolsitas tiene cada uno.</p>
+          <p class="sim-desc">¿Cuántas unidades van a producir? Si vendés en packs o combos, indicá cuántas unidades tiene cada uno.</p>
           <div class="sim-fields">
             <div class="sim-field">
-              <label class="sim-label">Cantidad de bolsitas producidas</label>
+              <label class="sim-label">Cantidad de unidades producidas</label>
               <input class="sim-input no-prefix" id="f-cant-bol" type="number" min="1" placeholder="Ej: 50">
             </div>
             <div class="sim-field">
-              <label class="sim-label">Bolsitas por pack (si vendés en pack)</label>
+              <label class="sim-label">Unidades por pack o combo (opcional)</label>
               <input class="sim-input no-prefix" id="f-bol-pack" type="number" min="1" placeholder="Ej: 3">
-              <span class="sim-hint-small">Dejalo vacío si solo vendés bolsitas sueltas</span>
+              <span class="sim-hint-small">Dejalo vacío si solo vendés unidades sueltas</span>
             </div>
           </div>
         </div>
@@ -1307,11 +1402,11 @@
           <p class="sim-desc">Si no sabés a cuánto poner el precio, mirá el "precio sugerido" en los resultados y usalo como referencia.</p>
           <div class="sim-fields">
             <div class="sim-field">
-              <label class="sim-label">Precio por bolsita individual</label>
+              <label class="sim-label">Precio por unidad</label>
               <div class="sim-prefix"><span class="sim-prefix-sym">$</span><input class="sim-input" id="f-precio-bol" type="number" min="0" step="any" placeholder="0"></div>
             </div>
             <div class="sim-field">
-              <label class="sim-label">Precio por pack</label>
+              <label class="sim-label">Precio por pack o combo</label>
               <div class="sim-prefix"><span class="sim-prefix-sym">$</span><input class="sim-input" id="f-precio-pack" type="number" min="0" step="any" placeholder="0"></div>
             </div>
             <div class="sim-field" style="grid-column:span 2">
@@ -1336,17 +1431,17 @@
         <div class="sim-results-subtitle">Costos</div>
         <div class="sim-results-grid">
           <div class="result-box mint">
-            <div class="result-label">Costo variable por bolsita</div>
+            <div class="result-label">Costo variable por unidad</div>
             <div class="result-value" id="r-cv-bol">—</div>
             <div class="result-formula">= suma de los costos variables</div>
           </div>
           <div class="result-box mint">
             <div class="result-label">Costos fijos totales</div>
             <div class="result-value" id="r-cf-total">—</div>
-            <div class="result-formula">= suma de costos fijos de la tanda</div>
+            <div class="result-formula">= suma de costos fijos de producción</div>
           </div>
           <div class="result-box lime">
-            <div class="result-label">Costo total de la tanda</div>
+            <div class="result-label">Costo total de producción</div>
             <div class="result-value" id="r-costo-total">—</div>
             <div class="result-formula">= (costo variable × cant.) + costos fijos</div>
           </div>
@@ -1360,43 +1455,43 @@
         <div class="sim-results-subtitle">Precios sugeridos y ganancia por unidad</div>
         <div class="sim-results-grid">
           <div class="result-box sky">
-            <div class="result-label">Precio sugerido por bolsita</div>
+            <div class="result-label">Precio sugerido por unidad</div>
             <div class="result-value" id="r-sug-bol">—</div>
             <div class="result-formula">= costo unitario × (1 + margen%)</div>
           </div>
           <div class="result-box sky">
-            <div class="result-label">Precio sugerido por pack</div>
+            <div class="result-label">Precio sugerido por pack o combo</div>
             <div class="result-value" id="r-sug-pack">—</div>
-            <div class="result-formula">= costo x bolsita x bolsitas/pack × (1 + margen%)</div>
+            <div class="result-formula">= costo unitario × unidades/pack × (1 + margen%)</div>
           </div>
           <div class="result-box teal">
-            <div class="result-label">Ganancia por bolsita</div>
+            <div class="result-label">Ganancia por unidad</div>
             <div class="result-value" id="r-gan-bol">—</div>
             <div class="result-formula">= precio venta − costo unitario</div>
           </div>
           <div class="result-box teal">
-            <div class="result-label">Ganancia por pack</div>
+            <div class="result-label">Ganancia por pack o combo</div>
             <div class="result-value" id="r-gan-pack">—</div>
-            <div class="result-formula">= precio pack − (costo unitario × bolsitas/pack)</div>
+            <div class="result-formula">= precio pack − (costo unitario × unidades/pack)</div>
           </div>
         </div>
 
         <div class="sim-results-subtitle">Punto de equilibrio y totales si venden toda la producción</div>
         <div class="sim-results-grid">
           <div class="result-box lime">
-            <div class="result-label">Punto de equilibrio (bolsitas)</div>
+            <div class="result-label">Punto de equilibrio (unidades)</div>
             <div class="result-value" id="r-pe-bol">—</div>
-            <div class="result-formula">= costo total ÷ precio por bolsita</div>
+            <div class="result-formula">= costo total ÷ precio por unidad</div>
           </div>
           <div class="result-box lime">
-            <div class="result-label">Punto de equilibrio (packs)</div>
+            <div class="result-label">Punto de equilibrio (packs o combos)</div>
             <div class="result-value" id="r-pe-pack">—</div>
-            <div class="result-formula">= costo total ÷ precio por pack</div>
+            <div class="result-formula">= costo total ÷ precio por pack o combo</div>
           </div>
           <div class="result-box mint">
             <div class="result-label">Ingreso total (vendiendo todo)</div>
             <div class="result-value" id="r-ing-total">—</div>
-            <div class="result-formula">= precio bolsita × cantidad producida</div>
+            <div class="result-formula">= precio unidad × cantidad producida</div>
           </div>
           <div class="result-box teal" id="box-gan-total">
             <div class="result-label">Ganancia total estimada</div>
@@ -1422,7 +1517,7 @@
             <span class="sim-hint-small">entre 10% y 30% es un estimado realista para empezar</span>
           </div>
           <div class="sim-field">
-            <label class="sim-label">Promedio de bolsitas por cliente</label>
+            <label class="sim-label">Promedio de unidades por cliente</label>
             <input class="sim-input no-prefix" id="p-promedio" type="number" min="0" placeholder="Ej: 2">
             <span class="sim-hint-small">cuántas unidades compraría cada persona en promedio</span>
           </div>
@@ -1436,12 +1531,12 @@
           <div class="proj-result">
             <div class="proj-result-label">Ingresos estimados</div>
             <div class="proj-result-value" id="p-ingresos">—</div>
-            <div class="proj-result-formula">= ventas estimadas × precio por bolsita</div>
+            <div class="proj-result-formula">= ventas estimadas × precio por unidad</div>
           </div>
           <div class="proj-result highlight">
             <div class="proj-result-label">Ganancia estimada del mes</div>
             <div class="proj-result-value" id="p-ganancia">—</div>
-            <div class="proj-result-formula">= ventas estimadas × ganancia por bolsita</div>
+            <div class="proj-result-formula">= ventas estimadas × ganancia por unidad</div>
           </div>
         </div>
       </div><!-- /sim-projection -->
@@ -1485,7 +1580,7 @@
       <div class="modal-explain" id="mExplain"></div>
 
       <div>
-        <div class="section-label">🧭 Preguntas guía para tu emprendimiento de té</div>
+        <div class="section-label">🧭 Preguntas guía para tu emprendimiento</div>
         <div class="q-list" id="mQuestions"></div>
       </div>
 
@@ -1650,8 +1745,42 @@ let data = {};
 /* ─── INIT ─── */
 function init() {
   try { data = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) { data = {}; }
-  Object.keys(data).forEach(id => { if (data[id]) renderPrev(id, data[id]); });
+  Object.keys(data).forEach(id => {
+    if (!id.startsWith('_proj_') && data[id]) renderPrev(id, data[id]);
+  });
   refreshProgress();
+}
+
+/* ─── PROJECT DATA ─── */
+const PROJ_MAP = {
+  '_proj_nombre':      'proj-nombre',
+  '_proj_producto':    'proj-producto',
+  '_proj_descripcion': 'proj-descripcion',
+};
+
+function initProj() {
+  Object.entries(PROJ_MAP).forEach(([key, elId]) => {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    if (data[key]) el.value = data[key];
+    el.addEventListener('input', () => {
+      data[key] = el.value;
+      persist();
+      updateSubtitle();
+    });
+  });
+  updateSubtitle();
+}
+
+function updateSubtitle() {
+  const nombre = document.getElementById('proj-nombre')?.value.trim();
+  const el = document.getElementById('canvas-subtitle');
+  if (!el) return;
+  if (nombre) {
+    el.innerHTML = 'Proyecto: <strong>' + nombre + '</strong> &nbsp;·&nbsp; Hacé clic en cada bloque para completarlo';
+  } else {
+    el.textContent = 'Completá los datos de tu proyecto para empezar';
+  }
 }
 
 /* ─── OPEN MODAL ─── */
@@ -1838,7 +1967,7 @@ function calcAll() {
   setVal('r-sug-pack',   usaPack ? (sugPack > 0 ? fmt(sugPack) : '—') : NA);
   setVal('r-gan-bol',    costoUnit > 0 ? fmt(ganBol)    : '—');
   setVal('r-gan-pack',   usaPack ? (costoPack > 0 ? fmt(ganPack) : '—') : NA);
-  setVal('r-pe-bol',     peBol     > 0 ? Math.ceil(peBol)  + ' bolsitas' : '—');
+  setVal('r-pe-bol',     peBol     > 0 ? Math.ceil(peBol)  + ' unidades' : '—');
   setVal('r-pe-pack',    usaPack ? (pePack > 0 ? Math.ceil(pePack) + ' packs' : '—') : NA);
   setVal('r-ing-total',  ingTotal  > 0 ? fmt(ingTotal) : '—');
   setVal('r-gan-total',  costoTotal> 0 ? fmt(ganTotal) : '—');
@@ -1898,15 +2027,44 @@ function saveAll() {
   toast('💾 Canvas guardado');
 }
 
+/* ─── PDF FONT CACHE ─── */
+let _pdfFont; // undefined=sin intentar, null=falló, string=base64
+
 /* ─── EXPORT ─── */
 /* ─── EXPORT PDF ─── */
-function exportPDF() {
+async function exportPDF() {
   if (!window.jspdf) {
     toast('❌ La librería PDF no cargó. Verificá tu conexión a internet.');
     return;
   }
+
+  toast('⏳ Preparando PDF…');
+
+  if (_pdfFont === undefined) {
+    try {
+      const resp = await fetch('https://cdn.jsdelivr.net/gh/google/fonts@main/apache/roboto/static/Roboto-Regular.ttf');
+      if (!resp.ok) throw new Error('font fetch failed');
+      const buf = await resp.arrayBuffer();
+      const arr = new Uint8Array(buf);
+      let b64 = '';
+      for (let i = 0; i < arr.length; i += 0x8000)
+        b64 += String.fromCharCode(...arr.subarray(i, i + 0x8000));
+      _pdfFont = btoa(b64);
+    } catch(e) { _pdfFont = null; }
+  }
+
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  let F = 'helvetica';
+  if (_pdfFont) {
+    try {
+      doc.addFileToVFS('Roboto.ttf', _pdfFont);
+      doc.addFont('Roboto.ttf', 'Roboto', 'normal');
+      doc.addFont('Roboto.ttf', 'Roboto', 'bold');
+      F = 'Roboto';
+    } catch(e) { F = 'helvetica'; }
+  }
 
   const PW = 210, PH = 297, M = 16, CW = PW - M * 2;
   let y = M;
@@ -1917,7 +2075,7 @@ function exportPDF() {
 
   const setS = (size, style, r = 50, g = 50, b = 50) => {
     doc.setFontSize(size);
-    doc.setFont('helvetica', style || 'normal');
+    doc.setFont(F, style || 'normal');
     doc.setTextColor(r, g, b);
   };
 
@@ -1970,13 +2128,26 @@ function exportPDF() {
   doc.rect(0, 38, PW, 2, 'F');
 
   setS(17, 'bold', 201, 218, 56);
-  doc.text('Modelo Canvas · Té en Hebras', M, 16);
+  doc.text('Modelo Canvas Interactivo', M, 16);
   setS(10, 'normal', 255, 255, 255);
   doc.text('Aprende a Emprender · Junior Achievement Argentina', M, 25);
   setS(8, 'normal', 180, 195, 200);
   doc.text('Exportado el ' + dateStr, M, 33);
 
   y = 52;
+
+  // ── DATOS DEL PROYECTO ──
+  sectionBanner('DATOS DEL PROYECTO', 29, 58, 72, 201, 218, 56);
+  sp(3);
+  const projNombre   = document.getElementById('proj-nombre')?.value.trim()     || '';
+  const projProducto = document.getElementById('proj-producto')?.value.trim()    || '';
+  const projDesc     = document.getElementById('proj-descripcion')?.value.trim() || '';
+  kv('Nombre del emprendimiento', projNombre   || 'Sin completar');
+  kv('Producto o servicio',       projProducto || 'Sin completar');
+  kv('Descripción del proyecto',  projDesc     || 'Sin completar');
+  sp(4);
+  hline();
+  sp(4);
 
   // ── CANVAS BLOCKS ──
   sectionBanner('MODELO CANVAS · LOS 9 BLOQUES', 29, 58, 72, 201, 218, 56);
@@ -2034,12 +2205,12 @@ function exportPDF() {
 
   // Variable costs
   const varFields = [
-    ['Té en hebras por bolsita', 'f-te'],
-    ['Filtro o bolsita de tela',  'f-filtro'],
-    ['Etiqueta',                  'f-etiqueta'],
-    ['Packaging',                 'f-packaging'],
-    ['Hilo / cierre',             'f-hilo'],
-    ['Otros costos variables',    'f-otros-var'],
+    ['Insumo principal por unidad',     'f-te'],
+    ['Envase o soporte',                'f-filtro'],
+    ['Etiqueta o identificación',       'f-etiqueta'],
+    ['Packaging o presentación',        'f-packaging'],
+    ['Cierre, terminación o detalle',   'f-hilo'],
+    ['Otros costos variables',          'f-otros-var'],
   ];
   const fixFields = [
     ['Diseño o impresión', 'f-diseno'],
@@ -2057,7 +2228,7 @@ function exportPDF() {
     if (hasVar) {
       check(6);
       setS(8.5, 'bold', 80, 90, 95);
-      doc.text('Costos variables por bolsita:', M + 4, y); y += 5;
+      doc.text('Costos variables por unidad:', M + 4, y); y += 5;
       varFields.forEach(([label, id]) => {
         const v = parseFloat(getV(id));
         if (v > 0) kv('  ' + label, '$' + v.toLocaleString('es-AR'));
@@ -2067,7 +2238,7 @@ function exportPDF() {
       sp(2);
       check(6);
       setS(8.5, 'bold', 80, 90, 95);
-      doc.text('Costos fijos de la tanda:', M + 4, y); y += 5;
+      doc.text('Costos fijos de producción:', M + 4, y); y += 5;
       fixFields.forEach(([label, id]) => {
         const v = parseFloat(getV(id));
         if (v > 0) kv('  ' + label, '$' + v.toLocaleString('es-AR'));
@@ -2078,10 +2249,10 @@ function exportPDF() {
     const bolPack = getV('f-bol-pack');
     const precBol = getV('f-precio-bol');
     const precPack = getV('f-precio-pack');
-    if (parseInt(cantBol)  > 0) kv('Cantidad producida',   cantBol + ' bolsitas');
-    if (parseInt(bolPack)  > 0) kv('Bolsitas por pack',    bolPack);
-    if (parseFloat(precBol)  > 0) kv('Precio por bolsita', '$' + parseFloat(precBol).toLocaleString('es-AR'));
-    if (parseFloat(precPack) > 0) kv('Precio por pack',    '$' + parseFloat(precPack).toLocaleString('es-AR'));
+    if (parseInt(cantBol)  > 0) kv('Cantidad producida',        cantBol + ' unidades');
+    if (parseInt(bolPack)  > 0) kv('Unidades por pack o combo', bolPack);
+    if (parseFloat(precBol)  > 0) kv('Precio por unidad',       '$' + parseFloat(precBol).toLocaleString('es-AR'));
+    if (parseFloat(precPack) > 0) kv('Precio por pack o combo', '$' + parseFloat(precPack).toLocaleString('es-AR'));
     kv('Margen aplicado', selectedMargin + '%');
     hline(190);
   }
@@ -2090,18 +2261,18 @@ function exportPDF() {
   subHead('Resultados calculados');
 
   const resultRows = [
-    ['COSTOS',                        null],
-    ['Costo variable por bolsita',       'r-cv-bol'],
+    ['COSTOS',                           null],
+    ['Costo variable por unidad',        'r-cv-bol'],
     ['Costos fijos totales',             'r-cf-total'],
-    ['Costo total de la tanda',          'r-costo-total'],
+    ['Costo total de producción',        'r-costo-total'],
     ['Costo unitario real',              'r-costo-unit'],
-    ['PRECIOS Y GANANCIA',             null],
-    ['Precio sugerido por bolsita',      'r-sug-bol'],
-    ['Precio sugerido por pack',         'r-sug-pack'],
-    ['Ganancia por bolsita',             'r-gan-bol'],
-    ['Ganancia por pack',                'r-gan-pack'],
-    ['PUNTO DE EQUILIBRIO Y TOTALES',  null],
-    ['Punto de equilibrio (bolsitas)',   'r-pe-bol'],
+    ['PRECIOS Y GANANCIA',               null],
+    ['Precio sugerido por unidad',       'r-sug-bol'],
+    ['Precio sugerido por pack o combo', 'r-sug-pack'],
+    ['Ganancia por unidad',              'r-gan-bol'],
+    ['Ganancia por pack o combo',        'r-gan-pack'],
+    ['PUNTO DE EQUILIBRIO Y TOTALES',    null],
+    ['Punto de equilibrio (unidades)',   'r-pe-bol'],
     ['Punto de equilibrio (packs)',      'r-pe-pack'],
     ['Ingreso total (vendiendo todo)',   'r-ing-total'],
     ['Ganancia total estimada',          'r-gan-total'],
@@ -2130,7 +2301,7 @@ function exportPDF() {
     hline(190);
     subHead('Proyección realista del primer mes');
     if (parseInt(pCli)   > 0) kv('Clientes potenciales estimados', pCli);
-    if (parseFloat(pPct) > 0) kv('% que compraría',                pPct + '%');
+    if (parseFloat(pPct) > 0) kv('% que compraría',                 pPct + '%');
     if (parseFloat(pProm)> 0) kv('Promedio de unidades por cliente', pProm);
     sp(3);
     const pVen = getR('p-ventas');
@@ -2146,40 +2317,40 @@ function exportPDF() {
   for (let p = 1; p <= totalPages; p++) {
     doc.setPage(p);
     doc.setFillColor(29, 58, 72);
-    doc.rect(0, PH - 10, PW, 10, 'F');
-    setS(7, 'normal', 160, 175, 180);
-    doc.text('Aprende a Emprender · Junior Achievement Argentina · ' + dateStr, M, PH - 7);
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(155, 170, 180);
-    doc.text('Recurso de mentoria creado por Guille Esmoris', M, PH - 3);
-    setS(7, 'normal', 160, 175, 180);
-    doc.text('Pag. ' + p + ' / ' + totalPages, PW - M, PH - 5, { align: 'right' });
+    doc.rect(0, PH - 14, PW, 14, 'F');
+    setS(8, 'bold', 210, 225, 232);
+    doc.text('Aprende a Emprender · Junior Achievement Argentina · ' + dateStr, M, PH - 9);
+    setS(8, 'normal', 200, 218, 226);
+    doc.text('Recurso de mentoría creado por Guille Esmoris', M, PH - 3.5);
+    setS(8, 'normal', 200, 218, 226);
+    doc.text('Pag. ' + p + ' / ' + totalPages, PW - M, PH - 3.5, { align: 'right' });
   }
 
-  doc.save('canvas-te-hebras.pdf');
+  doc.save('canvas-modelo.pdf');
   toast('📄 PDF generado y descargado');
 }
 
 /* ─── COPY TEXT (opción secundaria) ─── */
 function copyText() {
   const order = ['propuesta','usuarios','canales','relacion','aliados','actividades','recursos','costos','ingresos'];
-  let txt = 'MODELO CANVAS · TÉ EN HEBRAS\n';
+  const nombre = document.getElementById('proj-nombre')?.value.trim() || '';
+  let txt = 'MODELO CANVAS INTERACTIVO\n';
+  if (nombre) txt += 'Proyecto: ' + nombre + '\n';
   txt += 'Aprende a Emprender · Junior Achievement Argentina\n';
-  txt += '═'.repeat(48) + '\n\n';
+  txt += '='.repeat(48) + '\n\n';
   order.forEach(id => {
     const b = BLOCKS[id];
     txt += `${b.name.toUpperCase()}\n${b.question}\n\n`;
     txt += (data[id] || '(sin completar)') + '\n\n';
-    txt += '─'.repeat(48) + '\n\n';
+    txt += '-'.repeat(48) + '\n\n';
   });
   const getT = id => document.getElementById(id)?.textContent || '—';
-  txt += 'SIMULADOR FINANCIERO\n' + '═'.repeat(48) + '\n\n';
-  txt += `Costo variable por bolsita: ${getT('r-cv-bol')}\n`;
-  txt += `Costo total de la tanda:    ${getT('r-costo-total')}\n`;
+  txt += 'SIMULADOR FINANCIERO\n' + '='.repeat(48) + '\n\n';
+  txt += `Costo variable por unidad:  ${getT('r-cv-bol')}\n`;
+  txt += `Costo total de produccion:  ${getT('r-costo-total')}\n`;
   txt += `Costo unitario real:        ${getT('r-costo-unit')}\n`;
-  txt += `Precio sugerido p/bolsita:  ${getT('r-sug-bol')}\n`;
-  txt += `Ganancia por bolsita:       ${getT('r-gan-bol')}\n`;
+  txt += `Precio sugerido por unidad: ${getT('r-sug-bol')}\n`;
+  txt += `Ganancia por unidad:        ${getT('r-gan-bol')}\n`;
   txt += `Punto de equilibrio:        ${getT('r-pe-bol')}\n`;
   txt += `Ingreso total:              ${getT('r-ing-total')}\n`;
   txt += `Ganancia total:             ${getT('r-gan-total')}\n`;
@@ -2206,10 +2377,12 @@ function fallbackCopy(text) {
 
 /* ─── RESET ─── */
 function resetAll() {
-  if (!confirm('¿Seguro que querés borrar todo? Se borrarán el Canvas y el simulador financiero. Esta acción no se puede deshacer.')) return;
+  if (!confirm('¿Seguro que querés borrar todo? Se borrarán los datos del proyecto, los bloques del Canvas y el simulador financiero. Esta acción no se puede deshacer.')) return;
   data = {};
   localStorage.removeItem(KEY);
   Object.keys(BLOCKS).forEach(id => renderPrev(id, ''));
+  Object.values(PROJ_MAP).forEach(elId => { const el = document.getElementById(elId); if (el) el.value = ''; });
+  updateSubtitle();
   refreshProgress();
   // Reset financial
   finData = {};
@@ -2252,6 +2425,7 @@ document.querySelectorAll('.canvas-block').forEach(el => {
 
 /* ─── START ─── */
 init();
+initProj();
 initFin();
 </script>
 </body>
