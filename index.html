@@ -1452,11 +1452,11 @@
 </div><!-- /page -->
 
 <!-- ══ FOOTER ══ -->
-<footer style="text-align:center; padding: 18px 20px 22px; border-top: 1px solid #dde2e8; margin-top: 2px; background: #f0f0f0;">
-  <p style="font-size:11px; font-weight:600; color:#8a9bb0; letter-spacing:0.3px;">
+<footer style="text-align:center; padding: 20px 20px 26px; border-top: 1px solid #cdd3db; margin-top: 2px; background: #f0f0f0;">
+  <p style="font-size:11.5px; font-weight:700; color:#6b7f96; letter-spacing:0.4px;">
     Aprende a Emprender &nbsp;·&nbsp; Junior Achievement Argentina
   </p>
-  <p style="font-size:10px; font-weight:500; color:#b0bbc8; margin-top:4px; letter-spacing:0.2px;">
+  <p style="font-size:11px; font-weight:600; color:#7a8fa6; margin-top:7px; letter-spacing:0.2px;">
     Recurso de mentoría creado por Guille Esmoris
   </p>
 </footer>
@@ -2148,12 +2148,13 @@ function exportPDF() {
     doc.setFillColor(29, 58, 72);
     doc.rect(0, PH - 10, PW, 10, 'F');
     setS(7, 'normal', 160, 175, 180);
-    doc.text('Aprende a Emprender · Junior Achievement Argentina · ' + dateStr, M, PH - 6);
-    doc.setFontSize(6.5);
-    doc.setTextColor(180, 190, 195);
-    doc.text('Recurso de mentoria creado por Guille Esmoris', M, PH - 2.5);
+    doc.text('Aprende a Emprender · Junior Achievement Argentina · ' + dateStr, M, PH - 7);
+    doc.setFontSize(7.5);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(155, 170, 180);
+    doc.text('Recurso de mentoria creado por Guille Esmoris', M, PH - 3);
     setS(7, 'normal', 160, 175, 180);
-    doc.text('Pag. ' + p + ' / ' + totalPages, PW - M, PH - 4, { align: 'right' });
+    doc.text('Pag. ' + p + ' / ' + totalPages, PW - M, PH - 5, { align: 'right' });
   }
 
   doc.save('canvas-te-hebras.pdf');
