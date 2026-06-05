@@ -6,6 +6,7 @@
   <title>Modelo Canvas · Té en Hebras | Aprende a Emprender</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -101,8 +102,9 @@
     .tbtn:hover { opacity: 0.85; transform: translateY(-1px); }
 
     .tbtn-save   { background: #FF6B00; color: white; }
-    .tbtn-export { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
-    .tbtn-reset  { background: transparent; color: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.15); }
+    .tbtn-export { background: var(--c-lime); color: var(--c-dark); }
+    .tbtn-copy   { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.2); font-size: 11px; }
+    .tbtn-reset  { background: transparent; color: rgba(255,255,255,0.45); border: 1px solid rgba(255,255,255,0.12); }
 
     /* ══════════════════════════
        PROGRESS BAR
@@ -1042,7 +1044,8 @@
   </div>
   <div class="toolbar-actions">
     <button class="tbtn tbtn-save"   onclick="saveAll()">💾 <span class="tbtn-label">Guardar</span></button>
-    <button class="tbtn tbtn-export" onclick="exportText()">📋 <span class="tbtn-label">Exportar</span></button>
+    <button class="tbtn tbtn-export" onclick="exportPDF()">📄 <span class="tbtn-label">Exportar PDF</span></button>
+    <button class="tbtn tbtn-copy"   onclick="copyText()" title="Copiar todo como texto">📋</button>
     <button class="tbtn tbtn-reset"  onclick="resetAll()">🗑️ <span class="tbtn-label">Borrar todo</span></button>
   </div>
 </div>
@@ -1883,54 +1886,303 @@ function saveAll() {
 }
 
 /* ─── EXPORT ─── */
-function exportText() {
+/* ─── EXPORT PDF ─── */
+function exportPDF() {
+  if (!window.jspdf) {
+    toast('❌ La librería PDF no cargó. Verificá tu conexión a internet.');
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const PW = 210, PH = 297, M = 16, CW = PW - M * 2;
+  let y = M;
+
+  const newPage = () => { doc.addPage(); y = M + 4; };
+  const check   = (h = 12) => { if (y + h > PH - M - 8) newPage(); };
+  const sp      = (h = 4)  => { y += h; };
+
+  const setS = (size, style, r = 50, g = 50, b = 50) => {
+    doc.setFontSize(size);
+    doc.setFont('helvetica', style || 'normal');
+    doc.setTextColor(r, g, b);
+  };
+
+  const addLines = (text, x, indent = 0, maxW = CW) => {
+    const lines = doc.splitTextToSize(String(text || ''), maxW - indent);
+    lines.forEach(line => { check(5.5); doc.text(line, x + indent, y); y += 5.5; });
+  };
+
+  const hline = (gray = 210) => {
+    check(4);
+    doc.setDrawColor(gray, gray, gray);
+    doc.setLineWidth(0.25);
+    doc.line(M, y, PW - M, y);
+    y += 4;
+  };
+
+  const sectionBanner = (text, bgR, bgG, bgB, txR, txG, txB) => {
+    check(14);
+    doc.setFillColor(bgR, bgG, bgB);
+    doc.rect(0, y - 6, PW, 11, 'F');
+    setS(10, 'bold', txR, txG, txB);
+    doc.text(text, M, y);
+    y += 9;
+  };
+
+  const kv = (label, value) => {
+    if (!value || value === '—') return;
+    check(5.5);
+    setS(9, 'bold', 29, 58, 72);
+    const lw = doc.getStringUnitWidth(label + ':  ') * 9 / doc.internal.scaleFactor;
+    doc.text(label + ':', M + 4, y);
+    setS(9, 'normal', 55, 55, 55);
+    const valLines = doc.splitTextToSize(String(value), CW - 4 - lw);
+    doc.text(valLines[0], M + 4 + lw, y);
+    y += 5.5;
+    for (let i = 1; i < valLines.length; i++) {
+      check(5.5);
+      doc.text(valLines[i], M + 4 + lw, y);
+      y += 5.5;
+    }
+  };
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+  // ── PORTADA / HEADER ──
+  doc.setFillColor(29, 58, 72);
+  doc.rect(0, 0, PW, 38, 'F');
+  doc.setFillColor(201, 218, 56);
+  doc.rect(0, 38, PW, 2, 'F');
+
+  setS(17, 'bold', 201, 218, 56);
+  doc.text('Modelo Canvas · Té en Hebras', M, 16);
+  setS(10, 'normal', 255, 255, 255);
+  doc.text('Aprende a Emprender · Junior Achievement Argentina', M, 25);
+  setS(8, 'normal', 180, 195, 200);
+  doc.text('Exportado el ' + dateStr, M, 33);
+
+  y = 52;
+
+  // ── CANVAS BLOCKS ──
+  sectionBanner('MODELO CANVAS · LOS 9 BLOQUES', 29, 58, 72, 201, 218, 56);
+  sp(2);
+
+  const order = ['propuesta','usuarios','canales','relacion','aliados','actividades','recursos','costos','ingresos'];
+
+  order.forEach((id, i) => {
+    const b = BLOCKS[id];
+    const answer = (data[id] || '').trim();
+
+    check(22);
+    sp(3);
+
+    // Block name strip
+    doc.setFillColor(240, 243, 245);
+    doc.rect(M - 2, y - 5, CW + 4, 9, 'F');
+    setS(10, 'bold', 29, 58, 72);
+    doc.text(b.name.toUpperCase(), M, y);
+    y += 5;
+
+    setS(8.5, 'italic', 100, 110, 115);
+    addLines(b.question, M, 0, CW);
+    sp(1);
+
+    if (answer) {
+      setS(10, 'normal', 40, 40, 40);
+      addLines(answer, M, 3, CW - 3);
+    } else {
+      setS(9, 'italic', 175, 175, 175);
+      check(5.5);
+      doc.text('(sin completar)', M + 3, y);
+      y += 5.5;
+    }
+
+    if (i < order.length - 1) { sp(2); hline(); }
+  });
+
+  // ── FINANCIAL SECTION ──
+  sp(6);
+  sectionBanner('SIMULADOR FINANCIERO', 0, 122, 122, 255, 255, 255);
+  sp(3);
+
+  const getV = id => document.getElementById(id)?.value  || '';
+  const getR = id => document.getElementById(id)?.textContent || '—';
+
+  // Sub-section helper
+  const subHead = (text) => {
+    check(10);
+    sp(2);
+    setS(9, 'bold', 0, 122, 122);
+    doc.text(text.toUpperCase(), M, y);
+    y += 6;
+  };
+
+  // Variable costs
+  const varFields = [
+    ['Té en hebras por bolsita', 'f-te'],
+    ['Filtro o bolsita de tela',  'f-filtro'],
+    ['Etiqueta',                  'f-etiqueta'],
+    ['Packaging',                 'f-packaging'],
+    ['Hilo / cierre',             'f-hilo'],
+    ['Otros costos variables',    'f-otros-var'],
+  ];
+  const fixFields = [
+    ['Diseño o impresión', 'f-diseno'],
+    ['Transporte',         'f-transporte'],
+    ['Publicidad',         'f-publicidad'],
+    ['Herramientas',       'f-herramientas'],
+    ['Otros costos fijos', 'f-otros-fij'],
+  ];
+
+  const hasVar = varFields.some(([, id]) => parseFloat(getV(id)) > 0);
+  const hasFix = fixFields.some(([, id]) => parseFloat(getV(id)) > 0);
+
+  if (hasVar || hasFix) {
+    subHead('Datos ingresados');
+    if (hasVar) {
+      check(6);
+      setS(8.5, 'bold', 80, 90, 95);
+      doc.text('Costos variables por bolsita:', M + 4, y); y += 5;
+      varFields.forEach(([label, id]) => {
+        const v = parseFloat(getV(id));
+        if (v > 0) kv('  ' + label, '$' + v.toLocaleString('es-AR'));
+      });
+    }
+    if (hasFix) {
+      sp(2);
+      check(6);
+      setS(8.5, 'bold', 80, 90, 95);
+      doc.text('Costos fijos de la tanda:', M + 4, y); y += 5;
+      fixFields.forEach(([label, id]) => {
+        const v = parseFloat(getV(id));
+        if (v > 0) kv('  ' + label, '$' + v.toLocaleString('es-AR'));
+      });
+    }
+    sp(2);
+    const cantBol = getV('f-cant-bol');
+    const bolPack = getV('f-bol-pack');
+    const precBol = getV('f-precio-bol');
+    const precPack = getV('f-precio-pack');
+    if (parseInt(cantBol)  > 0) kv('Cantidad producida',   cantBol + ' bolsitas');
+    if (parseInt(bolPack)  > 0) kv('Bolsitas por pack',    bolPack);
+    if (parseFloat(precBol)  > 0) kv('Precio por bolsita', '$' + parseFloat(precBol).toLocaleString('es-AR'));
+    if (parseFloat(precPack) > 0) kv('Precio por pack',    '$' + parseFloat(precPack).toLocaleString('es-AR'));
+    kv('Margen aplicado', selectedMargin + '%');
+    hline(190);
+  }
+
+  // Calculated results
+  subHead('Resultados calculados');
+
+  const resultRows = [
+    ['─ COSTOS',                        null],
+    ['Costo variable por bolsita',       'r-cv-bol'],
+    ['Costos fijos totales',             'r-cf-total'],
+    ['Costo total de la tanda',          'r-costo-total'],
+    ['Costo unitario real',              'r-costo-unit'],
+    ['─ PRECIOS Y GANANCIA',             null],
+    ['Precio sugerido por bolsita',      'r-sug-bol'],
+    ['Precio sugerido por pack',         'r-sug-pack'],
+    ['Ganancia por bolsita',             'r-gan-bol'],
+    ['Ganancia por pack',                'r-gan-pack'],
+    ['─ PUNTO DE EQUILIBRIO Y TOTALES',  null],
+    ['Punto de equilibrio (bolsitas)',   'r-pe-bol'],
+    ['Punto de equilibrio (packs)',      'r-pe-pack'],
+    ['Ingreso total (vendiendo todo)',   'r-ing-total'],
+    ['Ganancia total estimada',          'r-gan-total'],
+  ];
+
+  resultRows.forEach(([label, id]) => {
+    if (!id) {
+      sp(2);
+      check(5);
+      setS(8, 'bold', 100, 110, 115);
+      doc.text(label, M + 4, y);
+      y += 4.5;
+    } else {
+      const val = getR(id);
+      if (val !== '—') kv(label, val);
+    }
+  });
+
+  // Realistic projection
+  const pCli  = getV('p-clientes');
+  const pPct  = getV('p-pct');
+  const pProm = getV('p-promedio');
+
+  if (parseInt(pCli) > 0) {
+    hline(190);
+    subHead('Proyección realista del primer mes');
+    if (parseInt(pCli)   > 0) kv('Clientes potenciales estimados', pCli);
+    if (parseFloat(pPct) > 0) kv('% que compraría',                pPct + '%');
+    if (parseFloat(pProm)> 0) kv('Promedio de unidades por cliente', pProm);
+    sp(3);
+    const pVen = getR('p-ventas');
+    const pIng = getR('p-ingresos');
+    const pGan = getR('p-ganancia');
+    if (pVen !== '—') kv('Ventas estimadas',          pVen);
+    if (pIng !== '—') kv('Ingresos estimados',         pIng);
+    if (pGan !== '—') kv('Ganancia estimada del mes',  pGan);
+  }
+
+  // ── FOOTER EN CADA PÁGINA ──
+  const totalPages = doc.getNumberOfPages();
+  for (let p = 1; p <= totalPages; p++) {
+    doc.setPage(p);
+    doc.setFillColor(29, 58, 72);
+    doc.rect(0, PH - 10, PW, 10, 'F');
+    setS(7, 'normal', 160, 175, 180);
+    doc.text('Aprende a Emprender · Junior Achievement Argentina · ' + dateStr, M, PH - 4);
+    doc.text('Pág. ' + p + ' / ' + totalPages, PW - M, PH - 4, { align: 'right' });
+  }
+
+  doc.save('canvas-te-hebras.pdf');
+  toast('📄 PDF generado y descargado');
+}
+
+/* ─── COPY TEXT (opción secundaria) ─── */
+function copyText() {
   const order = ['propuesta','usuarios','canales','relacion','aliados','actividades','recursos','costos','ingresos'];
   let txt = 'MODELO CANVAS · TÉ EN HEBRAS\n';
   txt += 'Aprende a Emprender · Junior Achievement Argentina\n';
   txt += '═'.repeat(48) + '\n\n';
   order.forEach(id => {
     const b = BLOCKS[id];
-    txt += `${b.name.toUpperCase()}\n`;
-    txt += `${b.question}\n\n`;
+    txt += `${b.name.toUpperCase()}\n${b.question}\n\n`;
     txt += (data[id] || '(sin completar)') + '\n\n';
     txt += '─'.repeat(48) + '\n\n';
   });
-
-  // Financial simulator results
   const getT = id => document.getElementById(id)?.textContent || '—';
-  txt += 'SIMULADOR FINANCIERO\n';
-  txt += '═'.repeat(48) + '\n\n';
-  txt += 'COSTOS\n';
-  txt += `• Costo variable por bolsita:  ${getT('r-cv-bol')}\n`;
-  txt += `• Costos fijos totales:        ${getT('r-cf-total')}\n`;
-  txt += `• Costo total de la tanda:     ${getT('r-costo-total')}\n`;
-  txt += `• Costo unitario real:         ${getT('r-costo-unit')}\n\n`;
-  txt += 'PRECIOS Y GANANCIA\n';
-  txt += `• Precio sugerido por bolsita: ${getT('r-sug-bol')}\n`;
-  txt += `• Precio sugerido por pack:    ${getT('r-sug-pack')}\n`;
-  txt += `• Ganancia por bolsita:        ${getT('r-gan-bol')}\n`;
-  txt += `• Ganancia por pack:           ${getT('r-gan-pack')}\n\n`;
-  txt += 'PUNTO DE EQUILIBRIO Y TOTALES\n';
-  txt += `• Punto de equilibrio (bol.):  ${getT('r-pe-bol')}\n`;
-  txt += `• Punto de equilibrio (packs): ${getT('r-pe-pack')}\n`;
-  txt += `• Ingreso total estimado:      ${getT('r-ing-total')}\n`;
-  txt += `• Ganancia total estimada:     ${getT('r-gan-total')}\n\n`;
-  txt += 'PROYECCIÓN REALISTA\n';
-  txt += `• Ventas estimadas:            ${getT('p-ventas')}\n`;
-  txt += `• Ingresos estimados:          ${getT('p-ingresos')}\n`;
-  txt += `• Ganancia estimada del mes:   ${getT('p-ganancia')}\n`;
+  txt += 'SIMULADOR FINANCIERO\n' + '═'.repeat(48) + '\n\n';
+  txt += `Costo variable por bolsita: ${getT('r-cv-bol')}\n`;
+  txt += `Costo total de la tanda:    ${getT('r-costo-total')}\n`;
+  txt += `Costo unitario real:        ${getT('r-costo-unit')}\n`;
+  txt += `Precio sugerido p/bolsita:  ${getT('r-sug-bol')}\n`;
+  txt += `Ganancia por bolsita:       ${getT('r-gan-bol')}\n`;
+  txt += `Punto de equilibrio:        ${getT('r-pe-bol')}\n`;
+  txt += `Ingreso total:              ${getT('r-ing-total')}\n`;
+  txt += `Ganancia total:             ${getT('r-gan-total')}\n`;
+  txt += `Ventas estimadas:           ${getT('p-ventas')}\n`;
+  txt += `Ganancia estimada del mes:  ${getT('p-ganancia')}\n`;
 
-  // Descarga como archivo .txt (funciona siempre, incluso desde file://)
-  const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
-  a.download = 'mi-canvas-te-hebras.txt';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  toast('📄 Archivo descargado');
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(txt).then(() => toast('📋 Texto copiado al portapapeles')).catch(() => fallbackCopy(txt));
+  } else {
+    fallbackCopy(txt);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  toast('📋 Texto copiado al portapapeles');
 }
 
 /* ─── RESET ─── */
