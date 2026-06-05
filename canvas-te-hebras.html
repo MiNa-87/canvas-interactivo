@@ -1792,41 +1792,44 @@ function calcAll() {
   const cfTotal = getNum('f-diseno') + getNum('f-transporte') + getNum('f-publicidad') +
                   getNum('f-herramientas') + getNum('f-otros-fij');
   // ── Production
-  const cantBol = getNum('f-cant-bol');
-  const bolPack = getNum('f-bol-pack') || 1;
+  const cantBol    = getNum('f-cant-bol');
+  const bolPackRaw = document.getElementById('f-bol-pack')?.value.trim();
+  const bolPack    = bolPackRaw ? getNum('f-bol-pack') : 0; // 0 = sin pack definido
+  const usaPack    = bolPack > 0;
   // ── Total & unit cost
   const costoTotal = cantBol > 0 ? (cvBol * cantBol) + cfTotal : 0;
   const costoUnit  = cantBol > 0 ? costoTotal / cantBol : 0;
-  const costoPack  = costoUnit * bolPack;
+  const costoPack  = usaPack ? costoUnit * bolPack : 0;
   // ── Suggested prices
-  const mult      = 1 + selectedMargin / 100;
-  const sugBol    = costoUnit > 0 ? costoUnit * mult : 0;
-  const sugPack   = costoUnit > 0 ? costoPack * mult : 0;
+  const mult    = 1 + selectedMargin / 100;
+  const sugBol  = costoUnit > 0 ? costoUnit * mult : 0;
+  const sugPack = usaPack && costoUnit > 0 ? costoPack * mult : 0;
   // ── Sale prices (user or suggested)
   const precioBol  = getNum('f-precio-bol')  || sugBol;
-  const precioPack = getNum('f-precio-pack') || sugPack;
+  const precioPack = usaPack ? (getNum('f-precio-pack') || sugPack) : 0;
   // ── Profit per unit
-  const ganBol  = costoUnit > 0 ? precioBol  - costoUnit  : 0;
-  const ganPack = costoPack > 0 ? precioPack - costoPack  : 0;
+  const ganBol  = costoUnit > 0 ? precioBol - costoUnit : 0;
+  const ganPack = usaPack && costoPack > 0 ? precioPack - costoPack : 0;
   // ── Break-even
   const peBol  = precioBol  > 0 && costoTotal > 0 ? costoTotal / precioBol  : 0;
-  const pePack = precioPack > 0 && costoTotal > 0 ? costoTotal / precioPack : 0;
+  const pePack = usaPack && precioPack > 0 && costoTotal > 0 ? costoTotal / precioPack : 0;
   // ── Totals (full production)
   const ingTotal = precioBol * cantBol;
   const ganTotal = ingTotal - costoTotal;
 
   function setVal(id, v) { const e = document.getElementById(id); if(e) e.textContent = v; }
 
-  setVal('r-cv-bol',     cvBol     > 0 ? fmt(cvBol)    : '—');
-  setVal('r-cf-total',   cfTotal   > 0 ? fmt(cfTotal)  : '—');
-  setVal('r-costo-total',costoTotal> 0 ? fmt(costoTotal): '—');
-  setVal('r-costo-unit', costoUnit > 0 ? fmt(costoUnit) : '—');
-  setVal('r-sug-bol',    sugBol    > 0 ? fmt(sugBol)   : '—');
-  setVal('r-sug-pack',   sugPack   > 0 ? fmt(sugPack)  : '—');
-  setVal('r-gan-bol',    costoUnit > 0 ? fmt(ganBol)   : '—');
-  setVal('r-gan-pack',   costoPack > 0 ? fmt(ganPack)  : '—');
+  const NA = 'No aplica';
+  setVal('r-cv-bol',     cvBol     > 0 ? fmt(cvBol)     : '—');
+  setVal('r-cf-total',   cfTotal   > 0 ? fmt(cfTotal)   : '—');
+  setVal('r-costo-total',costoTotal> 0 ? fmt(costoTotal) : '—');
+  setVal('r-costo-unit', costoUnit > 0 ? fmt(costoUnit)  : '—');
+  setVal('r-sug-bol',    sugBol    > 0 ? fmt(sugBol)    : '—');
+  setVal('r-sug-pack',   usaPack ? (sugPack > 0 ? fmt(sugPack) : '—') : NA);
+  setVal('r-gan-bol',    costoUnit > 0 ? fmt(ganBol)    : '—');
+  setVal('r-gan-pack',   usaPack ? (costoPack > 0 ? fmt(ganPack) : '—') : NA);
   setVal('r-pe-bol',     peBol     > 0 ? Math.ceil(peBol)  + ' bolsitas' : '—');
-  setVal('r-pe-pack',    pePack    > 0 ? Math.ceil(pePack) + ' packs'    : '—');
+  setVal('r-pe-pack',    usaPack ? (pePack > 0 ? Math.ceil(pePack) + ' packs' : '—') : NA);
   setVal('r-ing-total',  ingTotal  > 0 ? fmt(ingTotal) : '—');
   setVal('r-gan-total',  costoTotal> 0 ? fmt(ganTotal) : '—');
 
@@ -2103,6 +2106,7 @@ function exportPDF() {
       y += 4.5;
     } else {
       const val = getR(id);
+      // Incluye tanto valores calculados como "No aplica"; omite solo "—" (sin datos aún)
       if (val !== '—') kv(label, val);
     }
   });
