@@ -1,6 +1,6 @@
 # Canvas Interactivo · Té en Hebras
 
-Herramienta web interactiva de **Modelo Canvas** para estudiantes del programa **Aprende a Emprender** de [Junior Achievement Argentina](https://www.jaargentina.org.ar/), aplicada a un emprendimiento real de bolsitas de té en hebras.
+Herramienta web interactiva de **Modelo Canvas** para estudiantes del programa **Aprender a Emprender** de [Junior Achievement Argentina](https://www.jaargentina.org.ar/), aplicada a un emprendimiento real de bolsitas de té en hebras.
 
 ## ¿Qué es esta herramienta?
 
@@ -38,5 +38,5 @@ Para publicarlo online, podés usar [Vercel](https://vercel.com) o [GitHub Pages
 
 ## Programa
 
-**Aprende a Emprender** · Junior Achievement Argentina  
+**Aprender a Emprender** · Junior Achievement Argentina  
 Nivel: Educación Secundaria

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modelo Canvas Interactivo | Aprende a Emprender</title>
+  <title>Modelo Canvas Interactivo | Aprender a Emprender</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1112,7 +1112,7 @@
   <div class="toolbar-left">
     <div class="ja-badge">JA</div>
     <div class="toolbar-text">
-      <strong style="font-size:14px; font-weight:900; letter-spacing:0.5px;">Aprende a Emprender</strong>
+      <strong style="font-size:14px; font-weight:900; letter-spacing:0.5px;">Aprender a Emprender</strong>
       <span>Junior Achievement Argentina</span>
     </div>
   </div>
@@ -1549,7 +1549,7 @@
 <!-- ══ FOOTER ══ -->
 <footer style="text-align:center; padding: 20px 20px 26px; border-top: 1px solid #cdd3db; margin-top: 2px; background: #f0f0f0;">
   <p style="font-size:11.5px; font-weight:700; color:#6b7f96; letter-spacing:0.4px;">
-    Aprende a Emprender &nbsp;·&nbsp; Junior Achievement Argentina
+    Aprender a Emprender &nbsp;·&nbsp; Junior Achievement Argentina
   </p>
   <p style="font-size:11px; font-weight:600; color:#7a8fa6; margin-top:7px; letter-spacing:0.2px;">
     Recurso de mentoría creado por Guille Esmoris
@@ -2130,7 +2130,7 @@ async function exportPDF() {
   setS(17, 'bold', 201, 218, 56);
   doc.text('Modelo Canvas Interactivo', M, 16);
   setS(10, 'normal', 255, 255, 255);
-  doc.text('Aprende a Emprender · Junior Achievement Argentina', M, 25);
+  doc.text('Aprender a Emprender · Junior Achievement Argentina', M, 25);
   setS(8, 'normal', 180, 195, 200);
   doc.text('Exportado el ' + dateStr, M, 33);
 
@@ -2319,7 +2319,7 @@ async function exportPDF() {
     doc.setFillColor(29, 58, 72);
     doc.rect(0, PH - 14, PW, 14, 'F');
     setS(8, 'bold', 210, 225, 232);
-    doc.text('Aprende a Emprender · Junior Achievement Argentina · ' + dateStr, M, PH - 9);
+    doc.text('Aprender a Emprender · Junior Achievement Argentina · ' + dateStr, M, PH - 9);
     setS(8, 'normal', 200, 218, 226);
     doc.text('Recurso de mentoría creado por Guille Esmoris', M, PH - 3.5);
     setS(8, 'normal', 200, 218, 226);
@@ -2336,7 +2336,7 @@ function copyText() {
   const nombre = document.getElementById('proj-nombre')?.value.trim() || '';
   let txt = 'MODELO CANVAS INTERACTIVO\n';
   if (nombre) txt += 'Proyecto: ' + nombre + '\n';
-  txt += 'Aprende a Emprender · Junior Achievement Argentina\n';
+  txt += 'Aprender a Emprender · Junior Achievement Argentina\n';
   txt += '='.repeat(48) + '\n\n';
   order.forEach(id => {
     const b = BLOCKS[id];
